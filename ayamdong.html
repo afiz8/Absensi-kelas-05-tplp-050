@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ayam Panggang Citra 1 — Interaktif</title>
+<link href="https://cdn.jsdelivr.net/npm/chart.js" rel="stylesheet">
+<style>
+  /* --- Reset & Font --- */
+  *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
+  body{background:#fff3ea;color:#333;line-height:1.5;}
+  h1,h2,h3{color:#ff7a18;}
+  button{cursor:pointer;}
+  
+  /* --- Navbar --- */
+  nav{
+    position:sticky;top:0;width:100%;background:#ff7a18;color:#fff;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;box-shadow:0 4px 6px rgba(0,0,0,0.1);}
+  nav a{color:#fff;text-decoration:none;margin-left:1rem;font-weight:bold;}
+  nav a:hover{text-decoration:underline;}
+  
+  /* --- Container --- */
+  .container{max-width:1200px;margin:2rem auto;padding:0 1rem;}
+  .card{background:#fff;padding:1.5rem;margin:1rem 0;border-radius:1rem;box-shadow:0 4px 12px rgba(0,0,0,0.1);transition:0.3s;}
+  .card:hover{transform:translateY(-5px);box-shadow:0 8px 20px rgba(0,0,0,0.15);}
+  
+  /* --- Form --- */
+  input,select{padding:0.5rem;border-radius:0.5rem;border:1px solid #ccc;width:100%;margin:0.5rem 0;}
+  label{font-weight:bold;margin-top:0.5rem;display:block;}
+  
+  /* --- Button --- */
+  .btn{background:#ff7a18;color:#fff;padding:0.7rem 1.2rem;border:none;border-radius:0.5rem;font-weight:bold;transition:0.3s;}
+  .btn:hover{background:#ff9a40;}
+  
+  /* --- Chart --- */
+  canvas{background:#fff;margin-top:1rem;border-radius:1rem;box-shadow:0 4px 12px rgba(0,0,0,0.1);}
+  
+  /* --- Toast --- */
+  #toast{
+    visibility:hidden;
+    min-width:250px;
+    background:#333;color:#fff;text-align:center;border-radius:0.5rem;
+    position:fixed;z-index:1000;left:50%;bottom:30px;transform:translateX(-50%);
+    padding:1rem;font-weight:bold;
+  }
+  #toast.show{visibility:visible;animation:fadein 0.5s,fadeout 0.5s 2.5s;}
+  @keyframes fadein{from{bottom:0;opacity:0;} to{bottom:30px;opacity:1;}}
+  @keyframes fadeout{from{bottom:30px;opacity:1;} to{bottom:0;opacity:0;}}
+  
+  /* --- Ayam Animasi --- */
+  #ayam{position:fixed;bottom:10px;right:10px;width:80px;transition:all 1s;}
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav>
+  <div>🍗 Ayam Panggang Citra 1</div>
+  <div>
+    <a href="#calculator">Kalkulator</a>
+    <a href="#order">Order</a>
+    <a href="#chart">Chart</a>
+    <a href="#history">History</a>
+  </div>
+</nav>
+
+<!-- Header -->
+<div class="container">
+  <h1>Selamat Datang di Ayam Panggang Citra 1</h1>
+  <p>Analisis untung/rugi bisnis ayam panggang secara interaktif.</p>
+</div>
+
+<!-- Kalkulator -->
+<div class="container card" id="calculator">
+  <h2>Kalkulator Untung/Rugi</h2>
+  <label for="penjualan">Total Penjualan (Rp)</label>
+  <input type="number" id="penjualan" placeholder="Masukkan total penjualan">
+  
+  <label for="pengeluaran">Total Pengeluaran (Rp)</label>
+  <input type="number" id="pengeluaran" placeholder="Masukkan total pengeluaran">
+  
+  <button class="btn" onclick="hitungProfit()">Hitung Profit</button>
+  <h3 id="hasilProfit"></h3>
+</div>
+
+<!-- Order Form -->
+<div class="container card" id="order">
+  <h2>Form Order Dummy</h2>
+  <label for="nama">Nama Pemesan</label>
+  <input type="text" id="nama" placeholder="Masukkan nama">
+  
+  <label for="jumlah">Jumlah Ayam</label>
+  <input type="number" id="jumlah" placeholder="Masukkan jumlah ayam">
+  
+  <button class="btn" onclick="submitOrder()">Kirim Order</button>
+  <ul id="orderList"></ul>
+</div>
+
+<!-- Chart -->
+<div class="container card" id="chart">
+  <h2>Chart Penjualan</h2>
+  <canvas id="chartPenjualan" width="400" height="200"></canvas>
+</div>
+
+<!-- History Profit -->
+<div class="container card" id="history">
+  <h2>Riwayat Perhitungan Profit</h2>
+  <button class="btn" onclick="tampilkanHistory()">Tampilkan History</button>
+  <ul id="profitHistoryList"></ul>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<!-- Ayam Animasi -->
+<img src="https://i.ibb.co/7YN6V2k/ayam.png" id="ayam" alt="ayam">
+
+<!-- JS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  // ===== Toast =====
+  function showToast(message){
+    const toast = document.getElementById("toast");
+    toast.innerText = message;
+    toast.className = "show";
+    setTimeout(()=>{toast.className=toast.className.replace("show","");},3000);
+  }
+
+  // ===== Kalkulator Profit =====
+  function hitungProfit(){
+    const penjualan = parseFloat(document.getElementById("penjualan").value) || 0;
+    const pengeluaran = parseFloat(document.getElementById("pengeluaran").value) || 0;
+    const profit = penjualan - pengeluaran;
+    const hasil = document.getElementById("hasilProfit");
+    hasil.innerText = "Profit: Rp " + profit.toLocaleString();
+    showToast(profit>=0?"Profit Positif! 🎉":"Rugi 😢");
+
+    // Animasi ayam kalau profit positif
+    const ayam = document.getElementById("ayam");
+    if(profit>0){
+      ayam.style.bottom="300px";
+      setTimeout(()=>{ayam.style.bottom="10px";},1000);
+    }
+
+    // Simpan hasil ke localStorage
+    let history = JSON.parse(localStorage.getItem("profitHistory") || "[]");
+    history.push({penjualan, pengeluaran, profit, waktu: new Date().toLocaleString()});
+    localStorage.setItem("profitHistory", JSON.stringify(history));
+
+    // Update chart
+    addChartData(profit);
+  }
+
+  // ===== Tampilkan History =====
+  function tampilkanHistory(){
+    const history = JSON.parse(localStorage.getItem("profitHistory") || "[]");
+    const container = document.getElementById("profitHistoryList");
+    container.innerHTML = "";
+    history.forEach(item => {
+      const li = document.createElement("li");
+      li.innerText = `[${item.waktu}] Penjualan: Rp ${item.penjualan.toLocaleString()}, Pengeluaran: Rp ${item.pengeluaran.toLocaleString()}, Profit: Rp ${item.profit.toLocaleString()}`;
+      container.appendChild(li);
+    });
+  }
+
+  // ===== Order Dummy =====
+  function submitOrder(){
+    const nama = document.getElementById("nama").value;
+    const jumlah = document.getElementById("jumlah").value;
+    if(!nama||!jumlah){showToast("Isi semua form!");return;}
+    const orderList = document.getElementById("orderList");
+    const li = document.createElement("li");
+    li.innerText = `${nama} memesan ${jumlah} ayam`;
+    orderList.appendChild(li);
+
+    // simpan ke localStorage
+    const orders = JSON.parse(localStorage.getItem("orders")||"[]");
+    orders.push({nama,jumlah});
+    localStorage.setItem("orders",JSON.stringify(orders));
+    showToast("Order berhasil dikirim!");
+    document.getElementById("nama").value="";
+    document.getElementById("jumlah").value="";
+  }
+
+  // ===== Chart =====
+  const ctx = document.getElementById("chartPenjualan").getContext('2d');
+  const chartData = {
+    labels: [],
+    datasets: [{
+      label: 'Profit per Transaksi',
+      data: [],
+      backgroundColor: 'rgba(255,122,24,0.5)',
+      borderColor: 'rgba(255,122,24,1)',
+      borderWidth: 1
+    }]
+  };
+  const myChart = new Chart(ctx,{
+    type:'bar',
+    data:chartData,
+    options:{
+      responsive:true,
+      plugins:{
+        tooltip:{enabled:true},
+        legend:{display:false}
+      },
+      scales:{
+        y:{beginAtZero:true}
+      }
+    }
+  });
+  function addChartData(profit){
+    const date = new Date().toLocaleTimeString();
+    chartData.labels.push(date);
+    chartData.datasets[0].data.push(profit);
+    myChart.update();
+  }
+
+  // ===== Load order & history dari localStorage saat load halaman =====
+  window.onload = ()=>{
+    // Load order
+    const orders = JSON.parse(localStorage.getItem("orders")||"[]");
+    const orderList = document.getElementById("orderList");
+    orders.forEach(o=>{
+      const li = document.createElement("li");
+      li.innerText = `${o.nama} memesan ${o.jumlah} ayam`;
+      orderList.appendChild(li);
+    });
+
+    // Load chart & history
+    const history = JSON.parse(localStorage.getItem("profitHistory") || "[]");
+    history.forEach(item=>addChartData(item.profit));
+    tampilkanHistory();
+  }
+</script>
+</body>
+</html>
