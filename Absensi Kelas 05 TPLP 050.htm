@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="id"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">  
+  <meta charset="UTF-8">  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+  <title>Absensi Kelas 05 TPLP 050</title>  
+  <style>  
+    body {  
+      font-family: Arial, sans-serif;  
+      margin: 20px;  
+      background: #f8f9fa;  
+    }  
+    h1 {  
+      text-align: center;  
+      margin-bottom: 20px;  
+      color: #333;  
+    }  
+    .controls {  
+      display: flex;  
+      gap: 10px;  
+      justify-content: center;  
+      margin-bottom: 20px;  
+      flex-wrap: wrap;  
+    }  
+    input[type="text"] {  
+      padding: 8px;  
+      width: 220px;  
+      border: 1px solid #ccc;  
+      border-radius: 5px;  
+    }  
+    button {  
+      padding: 8px 14px;  
+      border: none;  
+      border-radius: 5px;  
+      cursor: pointer;  
+      background-color: #007bff;  
+      color: white;  
+      transition: 0.3s;  
+    }  
+    button:hover {  
+      background-color: #0056b3;  
+    }  
+    table {  
+      width: 100%;  
+      border-collapse: collapse;  
+      background: white;  
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);  
+    }  
+    th, td {  
+      padding: 10px;  
+      text-align: center;  
+      border-bottom: 1px solid #ddd;  
+    }  
+    th {  
+      background: #007bff;  
+      color: white;  
+      position: sticky;  
+      top: 0;  
+      z-index: 1;  
+    }  
+    .status {  
+      padding: 4px 8px;  
+      border-radius: 4px;  
+      display: inline-block;  
+      min-width: 70px;  
+    }  
+    .s-hadir { background: #28a745; color: white; }  
+    .s-tidak { background: #dc3545; color: white; }  
+    .s-izin { background: #ffc107; color: black; }  
+    .row-highlight { background: #ffeaea; }  
+    #stats {  
+      margin-top: 15px;  
+      text-align: center;  
+      font-weight: bold;  
+      color: #333;  
+    }  
+    footer {  
+      text-align: center;  
+      margin-top: 25px;  
+      color: #777;  
+    }  
+  </style>  
+</head>  
+<body>  
+  <h1>📋 ABSENSI KELAS 05 TPLP 050</h1>    <div class="controls">  
+    <input type="text" id="search" placeholder="Cari nama atau NIM...">  
+    <button id="exportCsv">📤 Ekspor CSV</button>  
+    <button id="resetAll">🔄 Reset Status</button>  
+    <button id="clearStorage">🗑️ Hapus Data</button>  
+  </div>    <table id="attendanceTable">  
+    <thead>  
+      <tr>  
+        <th>No</th>  
+        <th>NIM</th>  
+        <th>Nama</th>  
+        <th>Status</th>  
+        <th>Aksi</th>  
+      </tr>  
+    </thead>  
+    <tbody><tr>  
+      <td>1</td>  
+      <td>231011401425</td>  
+      <td>ADITTIA</td>  
+      <td>  
+        <span class="status ">  
+          -  
+        </span>  
+      </td>  
+      <td>  
+        <button class="action-btn" data-act="hadir" data-idx="0">Hadir</button>  
+        <button class="action-btn" data-act="tidak" data-idx="0">Tidak Hadir</button>  
+        <button class="action-btn" data-act="izin" data-idx="0">Izin</button>  
+      </td>  
+    </tr><tr>  
+      <td>2</td>  
+      <td>231011401927</td>  
+      <td>AFIZ HASYIM MUSYAFA</td>  
+      <td>  
+        <span class="status ">  
+          -  
+        </span>  
+      </td>  
+      <td>  
+        <button class="action-btn" data-act="hadir" data-idx="1">Hadir</button>  
+        <button class="action-btn" data-act="tidak" data-idx="1">Tidak Hadir</button>  
+        <button class="action-btn" data-act="izin" data-idx="1">Izin</button>  
+      </td>  
+    </tr><tr>  
+      <td>3</td>  
+      <td>231011402963</td>  
+      <td>AFLIADI RAHMAN SYAH</td>  
+      <td>  
+        <span class="status ">  
+          -  
+        </span>  
+      </td>  
+      <td>  
+        <button class="action-btn" data-act="hadir" data-idx="2">Hadir</button>  
+        <button class="action-btn" data-act="tidak" data-idx="2">Tidak Hadir</button>  
+        <button class="action-btn" data-act="izin" data-idx="2">Izin</button>  
+      </td>  
+    </tr><tr>  
+      <td>4</td>  
+      <td>231011401432</td>  
+      <td>ARDHIAN ADI PRASETTO</td>  
+      <td>  
+        <span class="status ">  
+          -  
+        </span>  
+      </td>  
+      <td>  
+        <button class="action-btn" data-act="hadir" data-idx="3">Hadir</button>  
+        <button class="action-btn" data-act="tidak" data-idx="3">Tidak Hadir</button>  
+        <button class="action-btn" data-act="izin" data-idx="3">Izin</button>  
+      </td>  
+    </tr><tr>  
+      <td>5</td>  
+      <td>231011403064</td>  
+      <td>ARNOVA MALAU</td>  
+      <td>  
+        <span class="status ">  
+          -  
+        </span>  
+      </td>  
+      <td>  
+        <button class="action-btn" data-act="hadir" data-idx="4">Hadir</button>  
+        <button class="action-btn" data-act="tidak" data-idx="4">Tidak Hadir</button>  
+        <button class="action-btn" data-act="izin" data-idx="4">Izin</button>  
+      </td>  
+    </tr><tr>  
+      <td>6</td>  
+      <td>231011401414</td>  
+      <td>CELVINE</td>  
+      <td>  
+        <span class="status ">  
+          -  
+        </span>  
+      </td>  
+      <td>  
+        <button class="action-btn" data-act="hadir" data-idx="5">Hadir</button>  
+        <button class="action-btn" data-act="tidak" data-idx="5">Tidak Hadir</button>  
+        <button class="action-btn" data-act="izin" data-idx="5">Izin</button>  
+      </td>  
+    </tr><tr>  
+      <td>7</td>  
+      <td>231011401922</td>  
+      <td>DIO VIELSA ALKAFI</td>  
+      <td>  
+        <span class="status ">  
+          -  
+        </span>  
+      </td>  
+      <td>  
+        <button class="action-btn" data-act="hadir" data-idx="6">Hadir</button>  
+        <button class="action-btn" data-act="tidak" data-idx="6">Tidak Hadir</button>  
+        <button class="action-btn" data-act="izin" data-idx="6">Izin</button>  
+      </td>  
+    </tr><tr>  
+      <td>8</td>  
+      <td>231011402928</td>  
+      <td>DZAKI NUR FAZRI</td>  
+      <td>  
+        <span class="status ">  
+          -  
+        </span>  
+      </td>  
+      <td>  
+        <button class="action-btn" data-act="hadir" data-idx="7">Hadir</button>  
+        <button class="action-btn" data-act="tidak" data-idx="7">Tidak Hadir</button>  
+        <button class="action-btn" data-act="izin" data-idx="7">Izin</button>  
+      </td>  
+    </tr><tr>  
+      <td>9</td>  
+      <td>231011401450</td>  
+      <td>EVAN NURHOLIS</td>  
+      <td>  
+        <span class="status ">  
+          -  
+        </span>  
+      </td>  
+      <td>  
+        <button class="action-btn" data-act="hadir" data-idx="8">Hadir</button>  
+        <button class="action-btn" data-act="tidak" data-idx="8">Tidak Hadir</button>  
+        <button class="action-btn" data-act="izin" data-idx="8">Izin</button>  
+      </td>  
+    </tr><tr>  
+      <td>10</td>  
+      <td>231011401445</td>  
+      <td>FADHEL RIZKT AN NAAFI</td>  
+      <td>  
+        <span class="status ">  
+          -  
+        </span>  
+      </td>  
+      <td>  
+        <button class="action-btn" data-act="hadir" data-idx="9">Hadir</button>  
+        <button class="action-btn" data-act="tidak" data-idx="9">Tidak Hadir</button>  
+        <button class="action-btn" data-act="izin" data-idx="9">Izin</button>  
+      </td>  
+    </tr><tr>  
+      <td>11</td>  
+      <td>231011403287</td>  
+      <td>INDRA FAUZAN</td>  
+      <td>  
+        <span class="status ">  
+          -  
+        </span>  
+      </td>  
+      <td>  
+        <button class="action-btn" data-act="hadir" data-idx="10">Hadir</button>  
+        <button class="action-btn" data-act="tidak" data-idx="10">Tidak Hadir</button>  
+        <button class="action-btn" data-act="izin" data-idx="10">Izin</button>  
+      </td>  
+    </tr><tr>  
+      <td>12</td>  
+      <td>231011401924</td>  
+      <td>JASWA ARIANSYA</td>  
+      <td>  
+        <span class="status ">  
+          -  
+        </span>  
+      </td>  
+      <td>  
+        <button class="action-btn" data-act="hadir" data-idx="11">Hadir</button>  
+        <button class="action-btn" data-act="tidak" data-idx="11">Tidak Hadir</button>  
+        <button class="action-btn" data-act="izin" data-idx="11">Izin</button>  
+      </td>  
+    </tr><tr>  
+      <td>13</td>  
+      <td>231011401421</td>  
+      <td>JEREMIA RAPHA NG</td>  
+      <td>  
+        <span class="status ">  
+          -  
+        </span>  
+      </td>  
+      <td>  
+        <button class="action-btn" data-act="hadir" data-idx="12">Hadir</button>  
+        <button class="action-btn" data-act="tidak" data-idx="12">Tidak Hadir</button>  
+        <button class="action-btn" data-act="izin" data-idx="12">Izin</button>  
+      </td>  
+    </tr><tr>  
+      <td>14</td>  
+      <td>231011402552</td>  
+      <td>LILI JULIA ZAUMA</td>  
+      <td>  
+        <span class="status ">  
+          -  
+        </span>  
+      </td>  
+      <td>  
+        <button class="action-btn" data-act="hadir" data-idx="13">Hadir</button>  
+        <button class="action-btn" data-act="tidak" data-idx="13">Tidak Hadir</button>  
+        <button class="action-btn" data-act="izin" data-idx="13">Izin</button>  
+      </td>  
+    </tr><tr>  
+      <td>15</td>  
+      <td>231011401929</td>  
+      <td>LUCKY RIZKY ZOELISTYA</td>  
+      <td>  
+        <span class="status ">  
+          -  
+        </span>  
+      </td>  
+      <td>  
+        <button class="action-btn" data-act="hadir" data-idx="14">Hadir</button>  
+        <button class="action-btn" data-act="tidak" data-idx="14">Tidak Hadir</button>  
+        <button class="action-btn" data-act="izin" data-idx="14">Izin</button>  
+      </td>  
+    </tr><tr>  
+      <td>16</td>  
+      <td>231011403479</td>  
+      <td>MUHAMAD AJI SATRIO</td>  
+      <td>  
+        <span class="status ">  
+          -  
+        </span>  
+      </td>  
+      <td>  
+        <button class="action-btn" data-act="hadir" data-idx="15">Hadir</button>  
+        <button class="action-btn" data-act="tidak" data-idx="15">Tidak Hadir</button>  
+        <button class="action-btn" data-act="izin" data-idx="15">Izin</button>  
+      </td>  
+    </tr><tr>  
+      <td>17</td>  
+      <td>231011401928</td>  
+      <td>MUHAMAD DAFFA</td>  
+      <td>  
+        <span class="status ">  
+          -  
+        </span>  
+      </td>  
+      <td>  
+        <button class="action-btn" data-act="hadir" data-idx="16">Hadir</button>  
+        <button class="action-btn" data-act="tidak" data-idx="16">Tidak Hadir</button>  
+        <button class="action-btn" data-act="izin" data-idx="16">Izin</button>  
+      </td>  
+    </tr><tr>  
+      <td>18</td>  
+      <td>231011401438</td>  
+      <td>MUHAMMAD EMILLUL FATA RETNOO</td>  
+      <td>  
+        <span class="status ">  
+          -  
+        </span>  
+      </td>  
+      <td>  
+        <button class="action-btn" data-act="hadir" data-idx="17">Hadir</button>  
+        <button class="action-btn" data-act="tidak" data-idx="17">Tidak Hadir</button>  
+        <button class="action-btn" data-act="izin" data-idx="17">Izin</button>  
+      </td>  
+    </tr><tr>  
+      <td>19</td>  
+      <td>201011401113</td>  
+      <td>MUHAMMAD HAIKAL FAQIH</td>  
+      <td>  
+        <span class="status ">  
+          -  
+        </span>  
+      </td>  
+      <td>  
+        <button class="action-btn" data-act="hadir" data-idx="18">Hadir</button>  
+        <button class="action-btn" data-act="tidak" data-idx="18">Tidak Hadir</button>  
+        <button class="action-btn" data-act="izin" data-idx="18">Izin</button>  
+      </td>  
+    </tr><tr>  
+      <td>20</td>  
+      <td>231011402645</td>  
+      <td>MUHAMMAD RAFI NORIKHSAN</td>  
+      <td>  
+        <span class="status ">  
+          -  
+        </span>  
+      </td>  
+      <td>  
+        <button class="action-btn" data-act="hadir" data-idx="19">Hadir</button>  
+        <button class="action-btn" data-act="tidak" data-idx="19">Tidak Hadir</button>  
+        <button class="action-btn" data-act="izin" data-idx="19">Izin</button>  
+      </td>  
+    </tr><tr>  
+      <td>21</td>  
+      <td>231011401442</td>  
+      <td>NANDAR</td>  
+      <td>  
+        <span class="status ">  
+          -  
+        </span>  
+      </td>  
+      <td>  
+        <button class="action-btn" data-act="hadir" data-idx="20">Hadir</button>  
+        <button class="action-btn" data-act="tidak" data-idx="20">Tidak Hadir</button>  
+        <button class="action-btn" data-act="izin" data-idx="20">Izin</button>  
+      </td>  
+    </tr><tr>  
+      <td>22</td>  
+      <td>231011401416</td>  
+      <td>NAUVAL RIFALDYTANSYAH PUTRA</td>  
+      <td>  
+        <span class="status ">  
+          -  
+        </span>  
+      </td>  
+      <td>  
+        <button class="action-btn" data-act="hadir" data-idx="21">Hadir</button>  
+        <button class="action-btn" data-act="tidak" data-idx="21">Tidak Hadir</button>  
+        <button class="action-btn" data-act="izin" data-idx="21">Izin</button>  
+      </td>  
+    </tr><tr>  
+      <td>23</td>  
+      <td>231011401444</td>  
+      <td>PRABU WIRA PUTRANTO</td>  
+      <td>  
+        <span class="status ">  
+          -  
+        </span>  
+      </td>  
+      <td>  
+        <button class="action-btn" data-act="hadir" data-idx="22">Hadir</button>  
+        <button class="action-btn" data-act="tidak" data-idx="22">Tidak Hadir</button>  
+        <button class="action-btn" data-act="izin" data-idx="22">Izin</button>  
+      </td>  
+    </tr><tr>  
+      <td>24</td>  
+      <td>231011402202</td>  
+      <td>RENDY JANU SHAFA ARDHANA</td>  
+      <td>  
+        <span class="status ">  
+          -  
+        </span>  
+      </td>  
+      <td>  
+        <button class="action-btn" data-act="hadir" data-idx="23">Hadir</button>  
+        <button class="action-btn" data-act="tidak" data-idx="23">Tidak Hadir</button>  
+        <button class="action-btn" data-act="izin" data-idx="23">Izin</button>  
+      </td>  
+    </tr><tr>  
+      <td>25</td>  
+      <td>231011401439</td>  
+      <td>RIZKY RAMADHANI SINITE</td>  
+      <td>  
+        <span class="status ">  
+          -  
+        </span>  
+      </td>  
+      <td>  
+        <button class="action-btn" data-act="hadir" data-idx="24">Hadir</button>  
+        <button class="action-btn" data-act="tidak" data-idx="24">Tidak Hadir</button>  
+        <button class="action-btn" data-act="izin" data-idx="24">Izin</button>  
+      </td>  
+    </tr><tr>  
+      <td>26</td>  
+      <td>231011401420</td>  
+      <td>SHARUL RAHMARDA</td>  
+      <td>  
+        <span class="status ">  
+          -  
+        </span>  
+      </td>  
+      <td>  
+        <button class="action-btn" data-act="hadir" data-idx="25">Hadir</button>  
+        <button class="action-btn" data-act="tidak" data-idx="25">Tidak Hadir</button>  
+        <button class="action-btn" data-act="izin" data-idx="25">Izin</button>  
+      </td>  
+    </tr><tr>  
+      <td>27</td>  
+      <td>231011403003</td>  
+      <td>TAMARA DEBORA PERMATA</td>  
+      <td>  
+        <span class="status ">  
+          -  
+        </span>  
+      </td>  
+      <td>  
+        <button class="action-btn" data-act="hadir" data-idx="26">Hadir</button>  
+        <button class="action-btn" data-act="tidak" data-idx="26">Tidak Hadir</button>  
+        <button class="action-btn" data-act="izin" data-idx="26">Izin</button>  
+      </td>  
+    </tr><tr>  
+      <td>28</td>  
+      <td>231011403652</td>  
+      <td>TRI WAHYUNI LESTARI</td>  
+      <td>  
+        <span class="status ">  
+          -  
+        </span>  
+      </td>  
+      <td>  
+        <button class="action-btn" data-act="hadir" data-idx="27">Hadir</button>  
+        <button class="action-btn" data-act="tidak" data-idx="27">Tidak Hadir</button>  
+        <button class="action-btn" data-act="izin" data-idx="27">Izin</button>  
+      </td>  
+    </tr><tr>  
+      <td>29</td>  
+      <td>231011401435</td>  
+      <td>WILY AFRIADI</td>  
+      <td>  
+        <span class="status ">  
+          -  
+        </span>  
+      </td>  
+      <td>  
+        <button class="action-btn" data-act="hadir" data-idx="28">Hadir</button>  
+        <button class="action-btn" data-act="tidak" data-idx="28">Tidak Hadir</button>  
+        <button class="action-btn" data-act="izin" data-idx="28">Izin</button>  
+      </td>  
+    </tr></tbody>  
+  </table>    <div id="stats">Total: 29 | Hadir: 0 | Tidak Hadir: 0 | Izin: 0</div>    <footer>© 2025 Kelas 05 TPLP 050 — Sistem Absensi Lokal</footer>    <script>  
+/*  
+DATA MAHASISWA  
+Kelas: 05 TPLP 050  
+Jika ada koreksi NIM atau Nama, ubah langsung di sini.  
+Afiz Hasyim Musyafa => 231011401927  
+*/  
+const students = [  
+  { no: 1, nim: "231011401425", name: "ADITTIA" },  
+  { no: 2, nim: "231011401927", name: "AFIZ HASYIM MUSYAFA" },  
+  { no: 3, nim: "231011402963", name: "AFLIADI RAHMAN SYAH" },  
+  { no: 4, nim: "231011401432", name: "ARDHIAN ADI PRASETTO" },  
+  { no: 5, nim: "231011403064", name: "ARNOVA MALAU" },  
+  { no: 6, nim: "231011401414", name: "CELVINE" },  
+  { no: 7, nim: "231011401922", name: "DIO VIELSA ALKAFI" },  
+  { no: 8, nim: "231011402928", name: "DZAKI NUR FAZRI" },  
+  { no: 9, nim: "231011401450", name: "EVAN NURHOLIS" },  
+  { no: 10, nim: "231011401445", name: "FADHEL RIZKT AN NAAFI" },  
+  { no: 11, nim: "231011403287", name: "INDRA FAUZAN" },  
+  { no: 12, nim: "231011401924", name: "JASWA ARIANSYA" },  
+  { no: 13, nim: "231011401421", name: "JEREMIA RAPHA NG" },  
+  { no: 14, nim: "231011402552", name: "LILI JULIA ZAUMA" },  
+  { no: 15, nim: "231011401929", name: "LUCKY RIZKY ZOELISTYA" },  
+  { no: 16, nim: "231011403479", name: "MUHAMAD AJI SATRIO" },  
+  { no: 17, nim: "231011401928", name: "MUHAMAD DAFFA" },  
+  { no: 18, nim: "231011401438", name: "MUHAMMAD EMILLUL FATA RETNOO" },  
+  { no: 19, nim: "201011401113", name: "MUHAMMAD HAIKAL FAQIH" },  
+  { no: 20, nim: "231011402645", name: "MUHAMMAD RAFI NORIKHSAN" },  
+  { no: 21, nim: "231011401442", name: "NANDAR" },  
+  { no: 22, nim: "231011401416", name: "NAUVAL RIFALDYTANSYAH PUTRA" },  
+  { no: 23, nim: "231011401444", name: "PRABU WIRA PUTRANTO" },  
+  { no: 24, nim: "231011402202", name: "RENDY JANU SHAFA ARDHANA" },  
+  { no: 25, nim: "231011401439", name: "RIZKY RAMADHANI SINITE" },  
+  { no: 26, nim: "231011401420", name: "SHARUL RAHMARDA" },  
+  { no: 27, nim: "231011403003", name: "TAMARA DEBORA PERMATA" },  
+  { no: 28, nim: "231011403652", name: "TRI WAHYUNI LESTARI" },  
+  { no: 29, nim: "231011401435", name: "WILY AFRIADI" },  
+];  
+  
+const LS_KEY = "absensi_05_tplp_050_v1";  
+  
+function loadAttendance() {  
+  const raw = localStorage.getItem(LS_KEY);  
+  if (!raw) return students.map(s => ({ nim: s.nim, status: "", name: s.name, no: s.no }));  
+  try {  
+    const parsed = JSON.parse(raw);  
+    if (!Array.isArray(parsed) || parsed.length !== students.length) {  
+      return students.map(s => ({ nim: s.nim, status: "", name: s.name, no: s.no }));  
+    }  
+    return parsed;  
+  } catch {  
+    return students.map(s => ({ nim: s.nim, status: "", name: s.name, no: s.no }));  
+  }  
+}  
+  
+let attendance = loadAttendance();  
+let filteredAttendance = [...attendance];  
+  
+function saveAttendance() {  
+  localStorage.setItem(LS_KEY, JSON.stringify(attendance));  
+}  
+  
+function updateStats() {  
+  const hadir = attendance.filter(r => r.status === "Hadir").length;  
+  const tidak = attendance.filter(r => r.status === "Tidak Hadir").length;  
+  const izin = attendance.filter(r => r.status === "Izin").length;  
+  const total = attendance.length;  
+  document.getElementById("stats").innerHTML =  
+    `Total: ${total} | Hadir: ${hadir} | Tidak Hadir: ${tidak} | Izin: ${izin}`;  
+}  
+  
+const tbody = document.querySelector("#attendanceTable tbody");  
+function renderTable(data = attendance) {  
+  tbody.innerHTML = "";  
+  data.forEach((row) => {  
+    const globalIdx = attendance.findIndex(r => r.nim === row.nim);  
+    const tr = document.createElement("tr");  
+    if (row.status === "Tidak Hadir") tr.classList.add("row-highlight");  
+  
+    tr.innerHTML = `  
+      <td>${row.no}</td>  
+      <td>${row.nim}</td>  
+      <td>${row.name}</td>  
+      <td>  
+        <span class="status ${row.status === 'Hadir' ? 's-hadir' : row.status === 'Tidak Hadir' ? 's-tidak' : row.status === 'Izin' ? 's-izin' : ''}">  
+          ${row.status || '-'}  
+        </span>  
+      </td>  
+      <td>  
+        <button class="action-btn" data-act="hadir" data-idx="${globalIdx}">Hadir</button>  
+        <button class="action-btn" data-act="tidak" data-idx="${globalIdx}">Tidak Hadir</button>  
+        <button class="action-btn" data-act="izin" data-idx="${globalIdx}">Izin</button>  
+      </td>  
+    `;  
+    tbody.appendChild(tr);  
+  });  
+  updateStats();  
+}  
+  
+document.getElementById("search").addEventListener("input", (e) => {  
+  const term = e.target.value.toLowerCase();  
+  filteredAttendance = attendance.filter(row =>  
+    row.nim.toLowerCase().includes(term) || row.name.toLowerCase().includes(term)  
+  );  
+  renderTable(filteredAttendance);  
+});  
+  
+tbody.addEventListener("click", function (e) {  
+  const btn = e.target.closest("button[data-act]");  
+  if (!btn) return;  
+  const act = btn.getAttribute("data-act");  
+  const idx = Number(btn.getAttribute("data-idx"));  
+  if (isNaN(idx)) return;  
+  if (act === "hadir") attendance[idx].status = "Hadir";  
+  if (act === "tidak") attendance[idx].status = "Tidak Hadir";  
+  if (act === "izin") attendance[idx].status = "Izin";  
+  saveAttendance();  
+  
+  const term = document.getElementById("search").value.toLowerCase();  
+  filteredAttendance = attendance.filter(row =>  
+    row.nim.toLowerCase().includes(term) || row.name.toLowerCase().includes(term)  
+  );  
+  renderTable(filteredAttendance);  
+});  
+  
+function exportCSV() {  
+  const header = ["No", "NIM", "Nama", "Status"];  
+  const rows = attendance.map(r => [r.no, r.nim, r.name, r.status]);  
+  const csv = [header.join(","), ...rows.map(r => r.join(","))].join("\n");  
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });  
+  const url = URL.createObjectURL(blob);  
+  const a = document.createElement("a");  
+  const now = new Date();  
+  a.href = url;  
+  a.download = `absensi_05_TPLP_050_${now.toISOString().slice(0, 10)}.csv`;  
+  document.body.appendChild(a);  
+  a.click();  
+  URL.revokeObjectURL(url);  
+  a.remove();  
+}  
+  
+document.getElementById("exportCsv").addEventListener("click", exportCSV);  
+document.getElementById("resetAll").addEventListener("click", () => {  
+  if (!confirm("Reset semua status absensi menjadi kosong?")) return;  
+  attendance = students.map(s => ({ nim: s.nim, status: "", name: s.name, no: s.no }));  
+  filteredAttendance = [...attendance];  
+  saveAttendance();  
+  renderTable();  
+});  
+document.getElementById("clearStorage").addEventListener("click", () => {  
+  if (!confirm("Hapus data absensi di local storage? (tidak bisa dibatalkan)")) return;  
+  localStorage.removeItem(LS_KEY);  
+  attendance = students.map(s => ({ nim: s.nim, status: "", name: s.name, no: s.no }));  
+  filteredAttendance = [...attendance];  
+  renderTable();  
+});  
+  
+renderTable();  
+  </script>    
+</body></html>
